@@ -93,6 +93,24 @@ function Node:removeChild(node)
     node:updateTransform()
 end
 
+function Node:reorderChild(node, index)
+    if node.parent ~= self then
+        error('Node parent is different')
+        return
+    elseif index < 1 or index > #self.children then
+        error('Index is out of range')
+        return
+    elseif index == node.indexInParent then
+        return
+    end
+
+    table.remove(self.children, node.indexInParent)
+    table.insert(self.children, index, node)
+    for i = 1, #self.children do
+        self.children[i].indexInParent = i
+    end
+end
+
 function Node:updateTransform(needPropagation)
     local x, y = self.x, self.y
     if self.parent ~= nil then
