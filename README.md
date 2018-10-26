@@ -1,6 +1,6 @@
 ## What is this?
 
-Basic scene graph for [LÖVE](https://love2d.org/) game engine.
+Basic scene graph library for [LÖVE](https://love2d.org/) game engine.
 
 ## Usage
 
@@ -8,14 +8,14 @@ Just copy `amour` into the root folder of your game.
 
 ## Required libraries
 
-- [classic](https://github.com/rxi/classic/) for OOP functionalities
-- [flux](https://github.com/rxi/flux) (optional) for tweening functionalities
+* [classic](https://github.com/rxi/classic/) for OOP functionalities
+* [flux](https://github.com/rxi/flux) (optional) for tweening functionalities
 
 ## Limitations
 
-- No support for z-index: child nodes added later will be drawn later.
-- Although transform properties like `x`, `y`, `r`, etc. can be read directly, they must be set via `updateXXX()` functions or the transforms won't be updated.
-- Usage of `flux` on transform properties must be done via `node:flux()` instead of `flux.to(node, ...)` to make sure node transform is updated.
+* No support for z-index: child nodes added later will be drawn later.
+* Although transform properties like `x`, `y`, `r`, etc. can be read directly, they must be set via `updateXXX()` functions or the transforms won't be updated.
+* Usage of `flux` on transform properties must be done via `node:flux()` instead of `flux.to(node, ...)` to make sure node transform is updated.
 
 ## Examples
 
@@ -35,8 +35,8 @@ function love.load()
 
     -- creates a title on the upper part of the screen
     local title = Text(scene.w * 0.5, 10,
-        12, 'A LoveNode example', { 0, 0, 0, 1 })
-    title:updateAnchor(0.5, 0)
+        12, 'An example of amour', { 0, 0, 0, 1 })
+    title:updateAnchor(0.5, 0) -- middle top
     scene:addChild(title)
 end
 
