@@ -64,15 +64,26 @@ end
 function Node:realdraw()
 end
 
-function Node:addChild(node)
+function Node:addChild(node, index)
     if node.parent ~= nil then
         node.parent:removeChild(node)
     end
 
     self.children = self.children or {}
-    table.insert(self.children, node)
+    if index ~= nil and type(index) == 'number' then
+        if index < 1 or index > #self.children then
+            error('Index is out of range')
+            return
+        end
+        table.insert(self.children, index, node)
+        for i = index, #self.children do
+            self.children[i].indexInParent = i
+        end
+    else
+        table.insert(self.children, node)
+        node.indexInParent = #self.children
+    end
     node.parent = self
-    node.indexInParent = #self.children
 
     node:updateTransform(true)
 end
