@@ -21,21 +21,19 @@ Just copy `amour` into the root folder of your game.
 
 ```lua
 local Scene = require 'amour.scene'
+local Rect = require 'amour.rect'
 local Text = require 'amour.text'
 
 local scene
 
 function love.load()
-    -- create the game scene with design resolution of 480x320
     scene = Scene(480, 320)
 
-    -- creates a grey background
-    local bg = Rect(scene.w * 0.5, scene.h * 0.5, scene.w, scene.h, { 0.5, 0.5, 0.5, 1 })
+    local bg = Rect(scene.w * 0.5, scene.h * 0.5, scene.w, scene.h, { 0.2, 0.2, 0.2, 1 })
     scene:addChild(bg)
 
-    -- creates a title on the upper part of the screen
-    local title = Text(scene.w * 0.5, 10, 12, 'An example of amour', { 0, 0, 0, 1 })
-    title:updateAnchor(0.5, 0) -- middle top
+    local title = Text(scene.w * 0.5, 10, 14, "Je t'aime!", { 1, 0, 0, 1})
+    title:updateAnchor(0.5, 0)
     scene:addChild(title)
 end
 
