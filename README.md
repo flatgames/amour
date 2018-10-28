@@ -7,7 +7,9 @@
 
 Basic scene graph library for [LÖVE](https://love2d.org/) game engine.
 
-## Usage
+Please read the [wiki page](https://github.com/flatgames/amour/wiki) for more details on usage.
+
+## Installation
 
 Just copy `amour` into the root folder of your game.
 
