@@ -4,7 +4,7 @@ local Text = Node:extend()
 function Text:new(x, y, font, textString, color)
     self.textString = textString
     self.color = color or { 1, 1, 1, 1 }
-    self.font = (type(font) == 'table' and font) or love.graphics.newFont(font)
+    self.font = (type(font) == 'number' and love.graphics.newFont(font)) or font
     self.text = love.graphics.newText(self.font, self.textString)
     Text.super.new(self, x, y, self.text:getWidth(), self.text:getHeight())
 end
