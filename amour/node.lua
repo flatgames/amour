@@ -182,11 +182,19 @@ function Node:checkMouseReleased(x, y)
 end
 
 function Node:flux(duration, changes, group)
-    group = group or require 'flux'
-    if changes.w or changes.h or changes.ax or changes.ay then
-        return group.to(self, duration, changes):onupdate(function() self.dirty = 2 end)
+    if group then
+        if changes.w or changes.h or changes.ax or changes.ay then
+            return group:to(self, duration, changes):onupdate(function() self.dirty = 2 end)
+        else
+            return group:to(self, duration, changes):onupdate(function() self.dirty = 1 end)
+        end
     else
-        return group.to(self, duration, changes):onupdate(function() self.dirty = 1 end)
+        group = require 'flux'
+        if changes.w or changes.h or changes.ax or changes.ay then
+            return group.to(self, duration, changes):onupdate(function() self.dirty = 2 end)
+        else
+            return group.to(self, duration, changes):onupdate(function() self.dirty = 1 end)
+        end
     end
 end
 
