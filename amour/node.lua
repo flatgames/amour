@@ -13,32 +13,33 @@ function Node:new(x, y, w, h)
     self.ax = 0.5
     self.ay = 0.5
     self.visible = true
+    self.dirty = 0
     self.transform = love.math.newTransform(self.x, self.y, self.r, self.sx, self.sy)
 end
 
 function Node:updatePosition(x, y)
     self.x, self.y = x, y
-    self:updateTransform()
+    self.dirty = 1
 end
 
 function Node:updateRotation(rotation)
     self.r = rotation
-    self:updateTransform()
+    self.dirty = 1
 end
 
 function Node:updateSize(w, h)
     self.w, self.h = w, h
-    self:updateTransform(true)
+    self.dirty = 2
 end
 
 function Node:updateScale(sx, sy)
     self.sx, self.sy = sx, sy
-    self:updateTransform()
+    self.dirty = 1
 end
 
 function Node:updateAnchor(ax, ay)
     self.ax, self.ay = ax, ay
-    self:updateTransform(true)
+    self.dirty = 2
 end
 
 function Node:getLeftTop()
@@ -47,6 +48,8 @@ end
 
 function Node:draw()
     if not self.visible then return end
+
+    if self.dirty > 0 then self:updateTransform(self.dirty == 2) end
 
     love.graphics.push()
     love.graphics.applyTransform(self.transform)
@@ -130,6 +133,7 @@ function Node:updateTransform(needPropagation)
     end
     self.transform:setTransformation(x, y, self.r, self.sx, self.sy)
     self.finalTransform = nil
+    self.dirty = 0
 
     if needPropagation and self.children ~= nil then
         for i = 1, #self.children do
@@ -139,7 +143,7 @@ function Node:updateTransform(needPropagation)
 end
 
 function Node:containsPoint(gx, gy)
-    local finalTransform = self.finalTransform
+    local finalTransform = (self.dirty == 0 and self.finalTransform) or nil
     if finalTransform == nil then
         local nodes = { self }
         local parent = self.parent
@@ -179,10 +183,10 @@ end
 
 function Node:flux(duration, changes, group)
     group = group or require 'flux'
-    if changes.w or changes.h then
-        return group.to(self, duration, changes):onupdate(function() self:updateTransform(true) end)
+    if changes.w or changes.h or changes.ax or changes.ay then
+        return group.to(self, duration, changes):onupdate(function() self.dirty = 2 end)
     else
-        return group.to(self, duration, changes):onupdate(function() self:updateTransform() end)
+        return group.to(self, duration, changes):onupdate(function() self.dirty = 1 end)
     end
 end
 
